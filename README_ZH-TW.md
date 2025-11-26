@@ -1,0 +1,247 @@
+# Jsearch MCP Server
+
+[English](./README_EN.md) | [简体中文](./README.md) | 繁體中文
+
+## 🚀 使用 EMCP 平台快速體驗
+
+**[EMCP](https://sit-emcp.kaleido.guru)** 是一個強大的 MCP 伺服器管理平台，讓您無需手動配置即可快速使用各種 MCP 伺服器！
+
+### 快速開始：
+
+1. 🌐 造訪 **[EMCP 平台](https://sit-emcp.kaleido.guru)**
+2. 📝 註冊並登入帳號
+3. 🎯 進入 **MCP 廣場**，瀏覽所有可用的 MCP 伺服器
+4. 🔍 搜尋或找到本伺服器（`bach-jsearch`）
+5. 🎉 點擊 **「安裝 MCP」** 按鈕
+6. ✅ 完成！即可在您的應用中使用
+
+### EMCP 平台優勢：
+
+- ✨ **零配置**：無需手動編輯配置檔案
+- 🎨 **視覺化管理**：圖形介面輕鬆管理所有 MCP 伺服器
+- 🔐 **安全可靠**：統一管理 API 金鑰和認證資訊
+- 🚀 **一鍵安裝**：MCP 廣場提供豐富的伺服器選擇
+- 📊 **使用統計**：即時查看服務調用情況
+
+立即造訪 **[EMCP 平台](https://sit-emcp.kaleido.guru)** 開始您的 MCP 之旅！
+
+
+---
+
+## 簡介
+
+這是一個使用 [FastMCP](https://fastmcp.wiki) 自動生成的 MCP 伺服器，用於存取 Jsearch API。
+
+- **PyPI 套件名**: `bach-jsearch`
+- **版本**: 1.0.0
+- **傳輸協定**: stdio
+
+
+## 安装
+
+### 从 PyPI 安装:
+
+```bash
+pip install bach-jsearch
+```
+
+### 从源码安装:
+
+```bash
+pip install -e .
+```
+
+## 运行
+
+### 方式 1: 使用 uvx（推荐，无需安装）
+
+```bash
+# 运行（uvx 会自动安装并运行）
+uvx --from bach-jsearch bach_jsearch
+
+# 或指定版本
+uvx --from bach-jsearch@latest bach_jsearch
+```
+
+### 方式 2: 直接运行（开发模式）
+
+```bash
+python server.py
+```
+
+### 方式 3: 安装后作为命令运行
+
+```bash
+# 安装
+pip install bach-jsearch
+
+# 运行（命令名使用下划线）
+bach_jsearch
+```
+
+## 配置
+
+### API 認證
+
+此 API 需要認證。請設定環境變數:
+
+```bash
+export API_KEY="your_api_key_here"
+```
+
+### 環境變數
+
+| 變數名 | 說明 | 必需 |
+|--------|------|------|
+| `API_KEY` | API 金鑰 | 是 |
+
+
+
+
+### 在 Claude Desktop 中使用
+
+编辑 Claude Desktop 配置文件 `claude_desktop_config.json`:
+
+
+```json
+{
+  "mcpServers": {
+    "jsearch": {
+      "command": "python",
+      "args": ["E:\path\to\jsearch\server.py"],
+      "env": {
+        "API_KEY": "your_api_key_here"
+      }
+    }
+  }
+}
+```
+
+**注意**: 請將 `E:\path\to\jsearch\server.py` 替換為實際的伺服器檔案路徑。
+
+
+## 可用工具
+
+此服务器提供以下工具:
+
+
+### `job_search`
+
+Search for jobs posted on any public job site across the web on the largest job aggregate in the world (Google for Jobs). Extensive filtering support and most options available on Google for Jobs.
+
+**端点**: `GET /search`
+
+
+**参数**:
+
+- `query` (string) *必需*: Free-form jobs search query. It is highly recommended to include job title and location as part of the query, see query examples below. Examples: web development jobs in chicago marketing manager in new york via linkedin
+
+- `page` (string): Page to return (each page includes up to 10 results). Default: 1 Allowed values: 1-50
+
+- `num_pages` (string): Number of pages to return, starting from page. Default: 1 Allowed values: 1-50 Note: requests for more than one page and up to 10 pages are charged x2 and requests for more than 10 pages are charged 3x.
+
+- `country` (string): Country code of the country from which to return job postings. Please note that this parameter must be set in order to get jobs in a specific country, for example, to query for software developer jobs in Berlin, one should add country=de to the request - e.g. query=software+developers+in+berlin&country=de. Default: us Allowed values: See https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+
+- `language` (string): Language code in which to return job postings. Leave empty to use the primary language in the specified country (country parameter). Note that each country supports certain languages. In case a language not supported by the specified country is used, it is likely that no results will be returned. Allowed values: See https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes
+
+- `date_posted` (string): Find jobs posted within the time you specify. Default: all Allowed values: all, today, 3days, week, month
+
+- `work_from_home` (string): Example value: 
+
+- `employment_types` (string): Find jobs of particular employment types, specified as a comma delimited list of the following values: FULLTIME, CONTRACTOR, PARTTIME, INTERN.
+
+- `job_requirements` (string): Find jobs with specific requirements, specified as a comma delimited list of the following values: under_3_years_experience, more_than_3_years_experience, no_experience, no_degree.
+
+- `radius` (string): Return jobs within a certain distance from location as specified as part of the query (in km). This internally sent as the Google \"lrad\" parameter and although it might affect the results, it is not strictly followed by Google for Jobs.
+
+- `exclude_job_publishers` (string): Exclude jobs published by specific publishers, specified as a comma (,) separated list of publishers to exclude. Example: BeeBe,Dice
+
+- `fields` (string): A comma separated list of job fields to include in the response (field projection). By default all fields are returned. Example: employer_name,job_publisher,job_title,job_country
+
+
+
+---
+
+
+### `job_details`
+
+Get all job details, including additional information such as: application options / links, employer reviews and estimated salaries for similar jobs.
+
+**端点**: `GET /job-details`
+
+
+**参数**:
+
+- `job_id` (string) *必需*: Job Id of the job for which to get details. Batching of up to 20 Job Ids is supported by separating multiple Job Ids by comma (,). Note that each Job Id in a batch request is counted as a request for quota calculation.
+
+- `country` (string): Country code of the country from which to return job posting. Default: us Allowed values: See https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+
+- `language` (string): Language code in which to return job postings. Leave empty to use the primary language in the specified country (country parameter). Allowed values: See https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes
+
+- `fields` (string): A comma separated list of job fields to include in the response (field projection). By default all fields are returned. Example: employer_name,job_publisher,job_title,job_country
+
+
+
+---
+
+
+### `job_salary`
+
+Get estimated salaries / pay for a jobs around a location by job title and location. The salary estimation is returned for several periods, depending on data availability / relevance, and includes: hourly, daily, weekly, monthly, or yearly.
+
+**端点**: `GET /estimated-salary`
+
+
+**参数**:
+
+- `job_title` (string) *必需*: Job title for which to get salary estimation.
+
+- `location` (string) *必需*: Free-text location/area in which to get salary estimation.
+
+- `location_type` (string): Specify the type of the location you are looking to get salary estimation for additional accuracy. Allowed values: ANY, CITY, STATE, COUNTRY Default: ANY
+
+- `years_of_experience` (string): Get job estimation for a specific experience level range (years). Allowed values: ALL, LESS_THAN_ONE, ONE_TO_THREE, FOUR_TO_SIX, SEVEN_TO_NINE, TEN_TO_FOURTEEN, ABOVE_FIFTEEN Default: ALL
+
+- `fields` (string): A comma separated list of job salary fields to include in the response (field projection). By default all fields are returned. Example: job_title,median_salary,location
+
+
+
+---
+
+
+### `company_job_salary`
+
+Get estimated job salaries/pay in a specific company by job title and optionally a location and experience level in years.
+
+**端点**: `GET /company-job-salary`
+
+
+**参数**:
+
+- `company` (string) *必需*: The company name for which to get salary information (e.g. Amazon).
+
+- `job_title` (string) *必需*: Job title for which to get salary estimation.
+
+- `location` (string): Free-text location/area in which to get salary estimation.
+
+- `location_type` (string): Specify the type of the location you are looking to get salary estimation for additional accuracy. Allowed values: ANY, CITY, STATE, COUNTRY Default: ANY
+
+- `years_of_experience` (string): Get job estimation for a specific experience level range (years). Allowed values: ALL, LESS_THAN_ONE, ONE_TO_THREE, FOUR_TO_SIX, SEVEN_TO_NINE, TEN_TO_FOURTEEN, ABOVE_FIFTEEN Default: ALL
+
+
+
+---
+
+
+
+## 技术栈
+
+- **FastMCP**: 快速、Pythonic 的 MCP 服务器框架
+- **传输协议**: stdio
+- **HTTP 客户端**: httpx
+
+## 开发
+
+此伺服器由 [API-to-MCP](https://github.com/BACH-AI-Tools/api-to-mcp) 工具自動生成。
+
+版本: 1.0.0
