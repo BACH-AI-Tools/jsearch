@@ -33,7 +33,7 @@
 這是一個 MCP 伺服器，用於存取 Jsearch API。
 
 - **PyPI 套件名**: `bach-jsearch`
-- **版本**: 1.0.0
+- **版本**: 2.0.0
 - **傳輸協定**: stdio
 
 
@@ -243,4 +243,4 @@ Get estimated job salaries/pay in a specific company by job title and optionally
 
 此伺服器由 [API-to-MCP](https://github.com/BACH-AI-Tools/api-to-mcp) 工具自動生成。
 
-版本: 1.0.0
+版本: 2.0.0
